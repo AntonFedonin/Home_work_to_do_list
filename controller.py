@@ -118,4 +118,5 @@ btn_get_bugaga.grid(row=2, column=4)
 
 btn_showinfo = ui.get_button('Инструкция', ui.get_info, 8)
 btn_showinfo.grid(row=3, column=1)
+
 window.mainloop()
