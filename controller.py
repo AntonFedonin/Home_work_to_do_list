@@ -7,7 +7,7 @@ import functions as f
 
 window = Tk()
 window.title('Мой список дел')
-window.geometry('350x300')
+# window.geometry('350x300')
 window.resizable(False, False)
 
 
