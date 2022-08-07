@@ -15,7 +15,7 @@ start_dict = {}
 temp_list = []
 i = None
 
-with open('data_file.json', 'r') as read_file:
+with open('data_file.json', 'r', encoding='utf-8') as read_file:
     start_dict = json.load(read_file)
 
 task_box = Listbox(selectmode=EXTENDED, font=('Aria Bold', 10))
@@ -42,18 +42,27 @@ i = len(temp_list)+1
 def add():
     global i
     task = task_entry.get()
-    if task.strip():
+    if task.isnumeric():
+        if messagebox.askyesno('Предупреждение', 'Вы уверены в том, что название дела состоит только из чисел?') == True:
+            dict = {i: task}
+            i += 1
+            start_dict.update(dict)
+            task_box.delete(0, i)
+            task_entry.delete(0, END)
+            messagebox.showinfo('OK', 'Окей! Мы тебя предупреждали!')
+            start(start_dict)
+        else:
+            messagebox.showinfo('', 'Хорошо, давай попробуем ещё разок!')
+            task_entry.delete(0, END)
+            task_box.delete(0, i)
+            start(start_dict)
+    elif task.strip():
         dict = {i: task}
         i += 1
         start_dict.update(dict)
         task_box.delete(0, i)
         task_entry.delete(0, END)
         start(start_dict)
-    # elif task.isnumeric():
-    #     print('Не вводите только числа') Проверка не работает(
-    #     task_entry.delete(0, END)
-    #     task_box.delete(0, i)
-    #     start(start_dict)    
     else:
         messagebox.showwarning(
             "Предупреждение", "Нельзя оставить строку пустой!")
@@ -73,7 +82,7 @@ def del_all_data():
 
 def save():
     with open("data_file.json", "w", encoding='utf-8') as write_file:
-        json.dump(start_dict, write_file, indent=4)
+        json.dump(start_dict, write_file, indent=4, ensure_ascii=False)
     messagebox.showinfo("Ok", "Данные успешно сохранены")
 
 
@@ -106,6 +115,9 @@ btn_del.grid(row=3, column=0)
 
 btn_save = ui.get_button('Сохранить', save, 8)
 btn_save.grid(row=2, column=2)
+
+btn_exit = ui.get_button('Выход', exit, 8)
+btn_exit.grid(row=2, column=1)
 
 btn_do_it = ui.get_button('Выполнить', del_one_task, 8)
 btn_do_it.grid(row=3, column=2)
